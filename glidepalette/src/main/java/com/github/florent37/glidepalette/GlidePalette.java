@@ -1,84 +1,122 @@
 package com.github.florent37.glidepalette;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-/**
- * Created by florentchampigny on 08/05/15.
- */
-public class GlidePalette extends BitmapPalette implements RequestListener<String, GlideDrawable> {
+public class GlidePalette<TranscodeType> extends BitmapPalette implements RequestListener<TranscodeType> {
 
-    protected RequestListener<String, GlideDrawable> callback;
+    protected RequestListener<TranscodeType> callback;
 
     protected GlidePalette() {
     }
 
-    public static GlidePalette with(String url) {
-        GlidePalette glidePalette = new GlidePalette();
+    public static GlidePalette<Drawable> with(String url) {
+        GlidePalette<Drawable> glidePalette = new GlidePalette<>();
         glidePalette.url = url;
         return glidePalette;
     }
 
-    public GlidePalette use(@Profile.PaletteProfile int paletteProfile) {
+    @SuppressWarnings("unchecked")
+    public GlidePalette<GifDrawable> asGif() {
+        return (GlidePalette<GifDrawable>) this;
+    }
+
+    public GlidePalette<TranscodeType> use(@Profile int paletteProfile) {
         super.use(paletteProfile);
         return this;
     }
 
-    public GlidePalette intoBackground(View view) {
+    public GlidePalette<TranscodeType> intoBackground(View view) {
         return this.intoBackground(view, Swatch.RGB);
     }
 
-    public GlidePalette intoBackground(View view, @Swatch.PaletteSwatch int paletteSwatch) {
+    @Override
+    public GlidePalette<TranscodeType> intoBackground(View view, @Swatch int paletteSwatch) {
         super.intoBackground(view, paletteSwatch);
         return this;
     }
 
-    public GlidePalette intoTextColor(TextView textView) {
+    public GlidePalette<TranscodeType> intoTextColor(TextView textView) {
         return this.intoTextColor(textView, Swatch.TITLE_TEXT_COLOR);
     }
 
-    public GlidePalette intoTextColor(TextView textView, @Swatch.PaletteSwatch int paletteSwatch) {
+    @Override
+    public GlidePalette<TranscodeType> intoTextColor(TextView textView, @Swatch int paletteSwatch) {
         super.intoTextColor(textView, paletteSwatch);
         return this;
     }
 
-    public GlidePalette setGlideListener(RequestListener<String, GlideDrawable> listener) {
+    @Override
+    public GlidePalette<TranscodeType> crossfade(boolean crossfade) {
+        super.crossfade(crossfade);
+        return this;
+    }
+
+    @Override
+    public GlidePalette<TranscodeType> crossfade(boolean crossfade, int crossfadeSpeed) {
+        super.crossfade(crossfade, crossfadeSpeed);
+        return this;
+    }
+
+    public GlidePalette<TranscodeType> setGlideListener(RequestListener<TranscodeType> listener) {
         this.callback = listener;
         return this;
     }
 
-    public GlidePalette intoCallBack(GlidePalette.CallBack callBack) {
+    @Override
+    public GlidePalette<TranscodeType> intoCallBack(GlidePalette.CallBack callBack) {
         super.intoCallBack(callBack);
         return this;
     }
 
-    //enregion
-
-    //region Glide.Listener
-
     @Override
-    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-        if (this.callback != null)
-            this.callback.onException(e, model, target, isFirstResource);
-        return false;
+    public GlidePalette<TranscodeType> setPaletteBuilderInterceptor(PaletteBuilderInterceptor interceptor) {
+        super.setPaletteBuilderInterceptor(interceptor);
+        return this;
     }
 
     @Override
-    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-        if (this.callback != null)
-            this.callback.onResourceReady(resource, model, target, isFromMemoryCache, isFirstResource);
-
-        if (resource instanceof GlideBitmapDrawable)
-            start(GlideBitmapDrawable.class.cast(resource).getBitmap());
-
-        return false;
+    public GlidePalette<TranscodeType> skipPaletteCache(boolean skipCache) {
+        super.skipPaletteCache(skipCache);
+        return this;
     }
 
-    //endregion
+    @Override public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<TranscodeType> target, boolean isFirstResource) {
+        return this.callback != null && this.callback.onLoadFailed(e, model, target, isFirstResource);
+    }
+
+    @Override public boolean onResourceReady(TranscodeType resource, Object model, Target<TranscodeType> target, DataSource dataSource, boolean isFirstResource) {
+        boolean callbackResult = this.callback != null && this.callback.onResourceReady(resource, model, target, dataSource, isFirstResource);
+
+        Bitmap b = null;
+        if (resource instanceof BitmapDrawable) {
+            b = ((BitmapDrawable) resource).getBitmap();
+        } else if (resource instanceof GifDrawable) {
+            b = ((GifDrawable) resource).getFirstFrame();
+        } else if (target instanceof BitmapHolder) {
+            b = ((BitmapHolder) target).getBitmap();
+        }
+
+        if (b != null) {
+            start(b);
+        }
+
+        return callbackResult;
+    }
+
+    public interface BitmapHolder {
+        @Nullable
+        Bitmap getBitmap();
+    }
 
 }

@@ -1,15 +1,15 @@
 GlidePalette
 =======
 
-[![Build Status](https://travis-ci.org/florent37/GlidePalette.svg)](https://travis-ci.org/florent37/GlidePalette)
-
 ![Alt sample](https://raw.githubusercontent.com/florent37/GlidePalette/master/screenshot/night_small_2.png)
 
 #Download
 
 In your module [![Download](https://api.bintray.com/packages/florent37/maven/GlidePalette/images/download.svg)](https://bintray.com/florent37/maven/GlidePalette/_latestVersion)
 ```groovy
-compile 'com.github.florent37:glidepalette:1.0.2@aar'
+compile 'com.github.florent37:glidepalette:2.0.0'
+
+compile 'com.github.bumptech.glide:glide:4.0.0-SNAPSHOT'
 ```
 
 #Sample
@@ -24,6 +24,7 @@ Glide.with(this).load(url)
                .use(GlidePalette.Profile.VIBRANT)
                     .intoBackground(titleView, GlidePalette.Swatch.RGB)
                     .intoTextColor(titleView, GlidePalette.Swatch.BODY_TEXT_COLOR)
+                    .crossfade(true)
          );
          .into(imageView);
 ```
@@ -38,7 +39,7 @@ GlidePalette.with(url)
 
 ##Palettes
 
-You can successively use following palettes :
+You can successively use following Palettes :
 
 - Palette.VIBRANT
 - Palette.VIBRANT_DARK
@@ -62,7 +63,7 @@ You can successively use following palettes :
 
 ##Swatches
 
-With the following Swatchs
+With the following Swatches
 
 - RGB
 - TITLE_TEXT_COLOR
@@ -82,6 +83,14 @@ And TextView Color
 ```java
 .intoTextColor(textView)
 .intoTextColor(textView,Swatch.TITLE_TEXT_COLOR)
+```
+
+with optional Background Crossfade effect
+```java
+.crossfade(true)
+    // will use default 300ms crossfade
+.crossfade(true, 1000)
+    // specify own crossfade speed in ms
 ```
 
 #CallBack
@@ -111,7 +120,7 @@ Looking for contributors, feel free to fork !
 
 #Credits
 
-Author: Florent Champigny
+Author: Florent Champigny www.florentchampigny.com/
 
 <a href="https://plus.google.com/+florentchampigny">
   <img alt="Follow me on Google+"
@@ -121,7 +130,7 @@ Author: Florent Champigny
   <img alt="Follow me on Twitter"
        src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/twitter.png" />
 </a>
-<a href="https://www.linkedin.com/profile/view?id=297860624">
+<a href="https://www.linkedin.com/in/florentchampigny">
   <img alt="Follow me on LinkedIn"
        src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/linkedin.png" />
 </a>
