@@ -3,9 +3,12 @@ GlidePalette
 
 ![Alt sample](https://raw.githubusercontent.com/florent37/GlidePalette/master/screenshot/night_small_2.png)
 
-<a href="https://play.google.com/store/apps/details?id=com.github.florent37.florent.champigny">
+
+<a href="https://goo.gl/WXW8Dc">
   <img alt="Android app on Google Play" src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
 </a>
+
+
 
 # Download
 
@@ -13,9 +16,9 @@ GlidePalette
 
 In your module [![Download](https://api.bintray.com/packages/florent37/maven/GlidePalette/images/download.svg)](https://bintray.com/florent37/maven/GlidePalette/_latestVersion)
 ```groovy
-compile 'com.github.florent37:glidepalette:2.1.1'
+compile 'com.github.florent37:glidepalette:2.1.2'
 
-compile 'com.github.bumptech.glide:glide:4.0.0'
+compile 'com.github.bumptech.glide:glide:4.6.1'
 ```
 
 # Sample
@@ -126,11 +129,15 @@ Looking for contributors, feel free to fork !
 
 # Credits
 
-Author: Florent Champigny www.florentchampigny.com/
+Author: Florent Champigny
 
-<a href="https://play.google.com/store/apps/details?id=com.github.florent37.florent.champigny">
+Fiches Plateau Moto : [https://www.fiches-plateau-moto.fr/](https://www.fiches-plateau-moto.fr/)
+
+<a href="https://goo.gl/WXW8Dc">
   <img alt="Android app on Google Play" src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
 </a>
+
+
 <a href="https://plus.google.com/+florentchampigny">
   <img alt="Follow me on Google+"
        src="https://raw.githubusercontent.com/florent37/DaVinci/master/mobile/src/main/res/drawable-hdpi/gplus.png" />
